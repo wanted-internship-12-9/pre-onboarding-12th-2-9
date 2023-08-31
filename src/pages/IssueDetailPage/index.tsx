@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as S from './IssueDetailPage.style';
+//import * as S from './IssueDetailPage.style';
 
 const IssueDetailPage = () => {
   return <div>IssueDetailPage</div>;
