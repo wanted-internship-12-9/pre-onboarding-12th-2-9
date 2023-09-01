@@ -5,10 +5,17 @@ import IssueHeader from '../../components/IssueHeader';
 import useIssueList from '../../hooks/useIssueList';
 import Spinner from '../../components/Loading/ScrollLoading';
 import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
+import Loading from '../../components/Loading';
+import { ORGANIZATION_NAME, REPOSITORY_NAME } from '../../constants';
 
 const IssueListPage = () => {
-  const { issues, isLoading, setNextPage } = useIssueList('facebook', 'react');
+  const { issues, isLoading, isInfiniteLoading, setNextPage } = useIssueList(
+    ORGANIZATION_NAME,
+    REPOSITORY_NAME,
+  );
   const { targetRef } = useInfiniteScroll(setNextPage, issues);
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.IssueUl>
@@ -33,7 +40,7 @@ const IssueListPage = () => {
           </Fragment>
         );
       })}
-      {isLoading ? <Spinner /> : <div ref={targetRef} />}
+      {isInfiniteLoading ? <Spinner /> : <div ref={targetRef} />}
     </S.IssueUl>
   );
 };
