@@ -1,5 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 
+import Error from '../Error';
+
 interface Props {
   children?: ReactNode;
   fallback?: ReactNode;
@@ -25,7 +27,7 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       if (this.props.fallback) return this.props.fallback;
-      return <h1>뭔가 문제가 생겼어요!</h1>;
+      return <Error message={'뭔가 문제가 생겼어요!'} />;
     }
 
     return this.props.children;
