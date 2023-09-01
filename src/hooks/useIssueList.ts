@@ -25,7 +25,7 @@ interface Action {
   };
 }
 
-const IssueListReducer = (state: IssueState, action: Action): IssueState => {
+const issueListReducer = (state: IssueState, action: Action): IssueState => {
   switch (action.type) {
     case ACTION_TYPE.SUCCESS:
       return {
@@ -44,8 +44,8 @@ const IssueListReducer = (state: IssueState, action: Action): IssueState => {
   }
 };
 
-const useIssues = (org: string, repo: string) => {
-  const [state, dispatch] = useReducer(IssueListReducer, {
+const useIssueList = (org: string, repo: string) => {
+  const [state, dispatch] = useReducer(issueListReducer, {
     issues: [],
     currentPage: 1,
     isLoading: false,
@@ -80,4 +80,4 @@ const useIssues = (org: string, repo: string) => {
   };
 };
 
-export default useIssues;
+export default useIssueList;
