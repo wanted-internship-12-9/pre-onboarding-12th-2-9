@@ -6,6 +6,7 @@ import { getIssueList } from '../api/get-issues';
 interface IssueState {
   issues: IssueListItem[] | [];
   isLoading: boolean;
+  isInfiniteLoading: boolean;
   error: string | Error;
   currentPage: number;
 }
@@ -13,6 +14,7 @@ interface IssueState {
 const ACTION_TYPE = {
   SUCCESS: 'SUCCESS',
   LOADING: 'LOADING',
+  INFINITE_LOADING: 'INFINITE_LOADING',
   ERROR: 'ERROR',
   NEXT: 'NEXT',
 } as const;
@@ -31,10 +33,13 @@ const issueListReducer = (state: IssueState, action: Action): IssueState => {
       return {
         ...state,
         isLoading: false,
+        isInfiniteLoading: false,
         issues: [...state.issues, ...(action.payload?.issues || [])],
       };
     case ACTION_TYPE.LOADING:
       return { ...state, isLoading: true };
+    case ACTION_TYPE.INFINITE_LOADING:
+      return { ...state, isInfiniteLoading: true };
     case ACTION_TYPE.ERROR:
       return { ...state, error: action.payload?.error || '' };
     case ACTION_TYPE.NEXT:
@@ -49,6 +54,7 @@ const useIssueList = (org: string, repo: string) => {
     issues: [],
     currentPage: 1,
     isLoading: false,
+    isInfiniteLoading: false,
     error: '',
   });
 
@@ -57,8 +63,9 @@ const useIssueList = (org: string, repo: string) => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch({ type: ACTION_TYPE.LOADING });
+    dispatch({ type: ACTION_TYPE.INFINITE_LOADING });
     const getIssues = async () => {
+      if (state.currentPage === 1) dispatch({ type: ACTION_TYPE.LOADING });
       try {
         const issueList = await getIssueList(org, repo, state.currentPage);
         dispatch({
