@@ -1,21 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from '../components/Header';
-import ErrorPage from '../pages/ErrorPage';
-import IssueDetailPage from '../pages/IssueDetailPage';
+import { createBrowserRouter } from 'react-router-dom';
+
+import App from '../App';
 import IssueListPage from '../pages/IssueListPage';
+import IssueDetailPage from '../pages/IssueDetailPage';
+import RouteErrorBoundary from '../components/RouteErrorBoundary';
 
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<IssueListPage />} />
-        <Route path="issue/:id" element={<IssueDetailPage />} />
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <RouteErrorBoundary />,
+    children: [
+      {
+        path: '',
+        element: <IssueListPage />,
+      },
+      {
+        path: 'issue/:id',
+        element: <IssueDetailPage />,
+      },
+    ],
+  },
+]);
 
-export default Router;
+export default router;
