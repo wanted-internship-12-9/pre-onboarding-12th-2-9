@@ -1,5 +1,5 @@
 import axios from 'axios';
-import GITHUB_BASE_URL from '../constants/base-url';
+import { GITHUB_BASE_URL } from '../constants';
 
 const AxiosFetch = axios.create({
   baseURL: GITHUB_BASE_URL,

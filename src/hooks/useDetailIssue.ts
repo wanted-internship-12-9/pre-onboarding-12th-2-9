@@ -4,12 +4,12 @@
 // 3. 액션 타입 설정하기
 
 import { useEffect, useReducer } from 'react';
-import { DetailIssueItem } from '../types/issues';
-import { getDetailIssue } from '../api/get-issues';
+import { IssueDetailItem } from '../types/issues';
+import { getIssueDetail } from '../api/get-issues';
 import axios from 'axios';
 
-interface DetailIssueState {
-  detailIssue: DetailIssueItem | Record<string, never>;
+interface IssueDetailState {
+  IssueDetail: IssueDetailItem | Record<string, never>;
   isLoading: boolean;
   error: string | Error;
 }
@@ -23,18 +23,18 @@ const ACTION_TYPE = {
 interface Action {
   type: (typeof ACTION_TYPE)[keyof typeof ACTION_TYPE];
   payload?: {
-    detailIssue?: DetailIssueItem;
+    IssueDetail?: IssueDetailItem;
     error?: string | Error;
   };
 }
 
-const detailIssueReducer = (state: DetailIssueState, action: Action): DetailIssueState => {
+const IssueDetailReducer = (state: IssueDetailState, action: Action): IssueDetailState => {
   switch (action.type) {
     case ACTION_TYPE.SUCCESS:
       return {
         ...state,
         isLoading: false,
-        detailIssue: action.payload?.detailIssue as DetailIssueItem,
+        IssueDetail: action.payload?.IssueDetail as IssueDetailItem,
       };
     case ACTION_TYPE.LOADING:
       return { ...state, isLoading: true };
@@ -44,9 +44,9 @@ const detailIssueReducer = (state: DetailIssueState, action: Action): DetailIssu
   }
 };
 
-const useDetailIssue = (org: string, repo: string, issueNumber: number) => {
-  const [state, dispatch] = useReducer(detailIssueReducer, {
-    detailIssue: {},
+const useIssueDetail = (org: string, repo: string, issueNumber: number) => {
+  const [state, dispatch] = useReducer(IssueDetailReducer, {
+    IssueDetail: {},
     isLoading: false,
     error: '',
   });
@@ -55,10 +55,10 @@ const useDetailIssue = (org: string, repo: string, issueNumber: number) => {
     const getIssue = async () => {
       dispatch({ type: ACTION_TYPE.LOADING });
       try {
-        const detailIssue = await getDetailIssue(org, repo, issueNumber);
+        const IssueDetail = await getIssueDetail(org, repo, issueNumber);
         dispatch({
           type: ACTION_TYPE.SUCCESS,
-          payload: { detailIssue: detailIssue as DetailIssueItem },
+          payload: { IssueDetail: IssueDetail as IssueDetailItem },
         });
       } catch (error) {
         if (axios.isAxiosError(error) || error instanceof Error) {
@@ -73,4 +73,4 @@ const useDetailIssue = (org: string, repo: string, issueNumber: number) => {
   return { ...state };
 };
 
-export default useDetailIssue;
+export default useIssueDetail;
