@@ -62,6 +62,8 @@ const useIssueList = (org: string, repo: string) => {
     dispatch({ type: ACTION_TYPE.NEXT });
   }, [dispatch]);
 
+  let flag = true;
+
   useEffect(() => {
     dispatch({ type: ACTION_TYPE.INFINITE_LOADING });
     const getIssues = async () => {
@@ -78,7 +80,11 @@ const useIssueList = (org: string, repo: string) => {
         }
       }
     };
-    getIssues();
+
+    if (flag) {
+      flag = false;
+      getIssues();
+    }
   }, [state.currentPage]);
 
   return {
