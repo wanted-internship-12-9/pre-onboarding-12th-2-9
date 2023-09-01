@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import * as S from './IssueListPage.style';
 import IssueHeader from '../../components/IssueHeader';
 import useIssueList from '../../hooks/useIssueList';
+import Spinner from '../../components/Loading/ScrollLoading';
+import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 
 const IssueListPage = () => {
-  const { issues } = useIssueList('facebook', 'react');
+  const { issues, isLoading, setNextPage } = useIssueList('facebook', 'react');
+  const { targetRef } = useInfiniteScroll(setNextPage, issues);
 
   return (
     <S.IssueUl>
@@ -30,6 +33,7 @@ const IssueListPage = () => {
           </Fragment>
         );
       })}
+      {isLoading ? <Spinner /> : <div ref={targetRef} />}
     </S.IssueUl>
   );
 };
