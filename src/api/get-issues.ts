@@ -19,3 +19,12 @@ export const getIssueDetail = async (org: string, repo: string, issueNumber: num
     return error;
   }
 };
+
+export const getRepository = async (org: string, repo: string) => {
+  try {
+    const { data } = await AxiosFetch.get(`repos/${org}/${repo}`);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
