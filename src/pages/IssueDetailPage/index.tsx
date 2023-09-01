@@ -5,6 +5,7 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { IssueDetailItem } from '../../types/issues';
 import IssueHeader from '../../components/IssueHeader';
+import Loading from '../../components/Loading';
 import { ORGANIZATION_NAME, REPOSITORY_NAME } from '../../constants';
 import useIssueDetail from '../../hooks/useIssueDetail';
 
@@ -14,11 +15,13 @@ const IssueDetailPage = () => {
   const navigate = useNavigate();
   console.log(navigate);
   const { id: issueNumber = '1' } = useParams();
-  const { issueDetail } = useIssueDetail(
+  const { issueDetail, isLoading } = useIssueDetail(
     ORGANIZATION_NAME,
     REPOSITORY_NAME,
     parseInt(issueNumber, 10),
   );
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.IssueContainer>
