@@ -9,6 +9,6 @@ export interface IssueListItem {
   created_at: string;
 }
 
-export interface DetailIssueItem extends IssueListItem {
+export interface IssueDetailItem extends IssueListItem {
   body: string;
 }

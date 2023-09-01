@@ -11,7 +11,7 @@ export const getIssueList = async (org: string, repo: string, page: number) => {
   }
 };
 
-export const getDetailIssue = async (org: string, repo: string, issueNumber: number) => {
+export const getIssueDetail = async (org: string, repo: string, issueNumber: number) => {
   try {
     const { data } = await AxiosFetch.get(`repos/${org}/${repo}/issues/${issueNumber}`);
     return data;
