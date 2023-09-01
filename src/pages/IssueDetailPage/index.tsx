@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { IssueDetailItem } from '../../types/issues';
@@ -12,10 +12,8 @@ import useIssueDetail from '../../hooks/useIssueDetail';
 import * as S from './IssueDetailPage.style';
 
 const IssueDetailPage = () => {
-  const navigate = useNavigate();
-  console.log(navigate);
   const { id: issueNumber = '1' } = useParams();
-  const { issueDetail, isLoading } = useIssueDetail(
+  const { issueDetail, isLoading, error } = useIssueDetail(
     ORGANIZATION_NAME,
     REPOSITORY_NAME,
     parseInt(issueNumber, 10),
@@ -23,6 +21,7 @@ const IssueDetailPage = () => {
 
   if (isLoading) return <Loading />;
 
+  if (error) throw error;
   return (
     <S.IssueContainer>
       {Object.keys(issueDetail).length && (
