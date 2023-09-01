@@ -4,12 +4,12 @@
 // 3. 액션 타입 설정하기
 
 import { useEffect, useReducer } from 'react';
+import axios from 'axios';
 import { IssueDetailItem } from '../types/issues';
 import { getIssueDetail } from '../api/get-issues';
-import axios from 'axios';
 
 interface IssueDetailState {
-  IssueDetail: IssueDetailItem | Record<string, never>;
+  issueDetail: IssueDetailItem | Record<string, never>;
   isLoading: boolean;
   error: string | Error;
 }
@@ -23,18 +23,18 @@ const ACTION_TYPE = {
 interface Action {
   type: (typeof ACTION_TYPE)[keyof typeof ACTION_TYPE];
   payload?: {
-    IssueDetail?: IssueDetailItem;
+    issueDetail?: IssueDetailItem;
     error?: string | Error;
   };
 }
 
-const IssueDetailReducer = (state: IssueDetailState, action: Action): IssueDetailState => {
+const issueDetailReducer = (state: IssueDetailState, action: Action): IssueDetailState => {
   switch (action.type) {
     case ACTION_TYPE.SUCCESS:
       return {
         ...state,
         isLoading: false,
-        IssueDetail: action.payload?.IssueDetail as IssueDetailItem,
+        issueDetail: action.payload?.issueDetail as IssueDetailItem,
       };
     case ACTION_TYPE.LOADING:
       return { ...state, isLoading: true };
@@ -45,8 +45,8 @@ const IssueDetailReducer = (state: IssueDetailState, action: Action): IssueDetai
 };
 
 const useIssueDetail = (org: string, repo: string, issueNumber: number) => {
-  const [state, dispatch] = useReducer(IssueDetailReducer, {
-    IssueDetail: {},
+  const [state, dispatch] = useReducer(issueDetailReducer, {
+    issueDetail: {},
     isLoading: false,
     error: '',
   });
@@ -55,10 +55,10 @@ const useIssueDetail = (org: string, repo: string, issueNumber: number) => {
     const getIssue = async () => {
       dispatch({ type: ACTION_TYPE.LOADING });
       try {
-        const IssueDetail = await getIssueDetail(org, repo, issueNumber);
+        const issueDetail = await getIssueDetail(org, repo, issueNumber);
         dispatch({
           type: ACTION_TYPE.SUCCESS,
-          payload: { IssueDetail: IssueDetail as IssueDetailItem },
+          payload: { issueDetail: issueDetail as IssueDetailItem },
         });
       } catch (error) {
         if (axios.isAxiosError(error) || error instanceof Error) {
