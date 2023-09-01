@@ -5,7 +5,6 @@ import { IssueListItem } from '../../types/issues';
 import { formatDate } from '../../utils/formatDate';
 
 import * as S from './IssueHeader.style';
-
 interface IIssueHeaderProps {
   issue: IssueListItem;
 }
